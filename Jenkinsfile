@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        // 2.1 La phase Test
+        // 2.1 La phase Testtt
         stage('Test') {
             steps {
                 // Use 'bat' for Windows and remove './'
