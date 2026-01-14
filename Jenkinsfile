@@ -9,15 +9,14 @@ pipeline {
                 bat 'gradlew test'
             }
             post {
-                            always {
-                                [cite_start]// 2. Archivage des résultats des tests unitaires [cite: 25]
-                                junit 'build/test-results/test/*.xml'
+                always {
+                    // 2. Archivage des résultats des tests unitaires
+                    junit 'build/test-results/test/*.xml'
 
-                                [cite_start]// 3. Génération des rapports de tests Cucumber [cite: 26]
-                                // CHANGED: Point to the folder defined in your Java class ('reports/')
-                                cucumber 'reports/*.json'
-                            }
-                        }
+                    // 3. Génération des rapports de tests Cucumber
+                    cucumber 'build/reports/cucumber/*.json'
+                }
+            }
         }
 
         // 2.2 La phase Code Analysis
