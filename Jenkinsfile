@@ -67,16 +67,28 @@ pipeline {
     }
 
     // 2.6 La phase Notification
-    post {
-        success {
-            mail to: 'kh_benferhat@esi.dz',
-                 subject: "Success: ${currentBuild.fullDisplayName}",
-                 body: "The build and deploy were successful."
+        post {
+            success {
+                // Email Notification
+                mail to: 'kh_benferhat@esi.dz',
+                     subject: "Success: ${currentBuild.fullDisplayName}",
+                     body: "The build and deploy were successful."
+
+                // Slack Notification
+                slackSend color: 'good',
+                          channel: 'tp_ogl_gradle', // CHANGE THIS to your actual channel name
+                          message: "Build Success: ${currentBuild.fullDisplayName} (<${env.BUILD_URL}|Open>)"
+            }
+            failure {
+                // Email Notification
+                mail to: 'kh_benferhat@esi.dz',
+                     subject: "Failed: ${currentBuild.fullDisplayName}",
+                     body: "The pipeline failed in stage: ${env.STAGE_NAME}"
+
+                // Slack Notification
+                slackSend color: 'danger',
+                          channel: 'tp_ogl_gradle', // CHANGE THIS to your actual channel name
+                          message: "Build Failed: ${currentBuild.fullDisplayName} in stage ${env.STAGE_NAME} (<${env.BUILD_URL}|Open>)"
+            }
         }
-        failure {
-            mail to: 'kh_benferhat@esi.dz',
-                 subject: "Failed: ${currentBuild.fullDisplayName}",
-                 body: "The pipeline failed in stage: ${env.STAGE_NAME}"
-        }
-    }
 }
