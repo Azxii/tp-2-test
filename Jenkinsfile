@@ -79,7 +79,7 @@ pipeline {
             mail to: 'kh_benferhat@esi.dz',
                  subject: "Failed: ${currentBuild.fullDisplayName}",
                  body: "The pipeline failed in stage: ${env.STAGE_NAME}"
-
+            //test
             // Uncomment if you have Slack configured
             // slackSend channel: '#dev-team', color: 'danger', message: "Build Failed: ${currentBuild.fullDisplayName}"
         }
