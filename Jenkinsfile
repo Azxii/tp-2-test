@@ -14,7 +14,8 @@ pipeline {
                     junit 'build/test-results/test/*.xml'
 
                     // 3. Génération des rapports de tests Cucumber
-                    cucumber 'build/reports/cucumber/*.json'
+                    // UPDATED: Looks in 'reports/' to match your Java code
+                    cucumber 'reports/*.json'
                 }
             }
         }
@@ -23,8 +24,8 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    // Analyse la qualité du code avec SonarQube (Windows)
-                    bat 'gradlew sonarqube'
+                    // Analyse la qualité du code avec SonarQube
+                    bat 'gradlew sonar'
                 }
             }
         }
@@ -42,10 +43,10 @@ pipeline {
         // 2.4 La phase Build
         stage('Build') {
             steps {
-                // 1. Génération du fichier Jar (Windows)
+                // 1. Génération du fichier Jar
                 bat 'gradlew assemble'
 
-                // 2. Génération de la documentation (Windows)
+                // 2. Génération de la documentation
                 bat 'gradlew javadoc'
             }
             post {
@@ -59,7 +60,7 @@ pipeline {
         // 2.5 La phase Deploy
         stage('Deploy') {
             steps {
-                // Déployer le fichier Jar (Windows)
+                // Déployer le fichier Jar
                 bat 'gradlew publish'
             }
         }
@@ -71,17 +72,11 @@ pipeline {
             mail to: 'kh_benferhat@esi.dz',
                  subject: "Success: ${currentBuild.fullDisplayName}",
                  body: "The build and deploy were successful."
-
-            // Uncomment if you have Slack configured
-            // slackSend channel: '#dev-team', message: "Build Success: ${currentBuild.fullDisplayName}"
         }
         failure {
             mail to: 'kh_benferhat@esi.dz',
                  subject: "Failed: ${currentBuild.fullDisplayName}",
                  body: "The pipeline failed in stage: ${env.STAGE_NAME}"
-            //test
-            // Uncomment if you have Slack configured
-            // slackSend channel: '#dev-team', color: 'danger', message: "Build Failed: ${currentBuild.fullDisplayName}"
         }
     }
 }
