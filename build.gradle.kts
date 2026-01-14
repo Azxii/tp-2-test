@@ -8,8 +8,25 @@ plugins {
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'NouadjiNazim'
+            artifactId = 'lib'
+            version = '1.0'
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = uri('https://mymavenrepo.com/repo/cEmjfkxugPlzLxXg1A2B/')
+            credentials {
+                username = 'myMavenRepo'
+                password = 'test0005'
+            }
+        }
+    }
 }
 
 sonar {

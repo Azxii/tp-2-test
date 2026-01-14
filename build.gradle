@@ -1,18 +1,43 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.sonarqube' version '7.2.2.6593'
     id 'maven-publish'
+    // Updated to a valid plugin version (7.x is for the server, not the Gradle plugin)
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 
-// --- ADD THIS BLOCK ---
+// REQUIRED: This tells Gradle where to download the libraries (JUnit, Cucumber)
 repositories {
     mavenCentral()
 }
-// ----------------------
+
+dependencies {
+    // Cucumber Core
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
+
+    // REQUIRED: Cucumber JUnit Adapter (Fixes "@RunWith(Cucumber.class)" error)
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+
+    // JUnit 4
+    testImplementation 'junit:junit:4.13.2'
+}
+
+test {
+    // REQUIRED: Tells Gradle to use JUnit 4 to run the tests
+    useJUnit()
+
+    // Generate coverage reports after tests run
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
 
 publishing {
     publications {
@@ -42,11 +67,4 @@ sonar {
         property 'sonar.host.url', 'http://localhost:9000'
         property 'sonar.login', 'sqa_9d7dfca1275ac35f2620073c6efdeeec6b7808cb'
     }
-}
-
-dependencies {
-    testImplementation 'io.cucumber:cucumber-java:6.0.0'
-    testImplementation 'junit:junit:4.12'
-    // You might also need this to run Cucumber with JUnit 4:
-    testImplementation 'io.cucumber:cucumber-junit:6.0.0'
 }
