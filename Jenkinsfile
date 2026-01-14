@@ -69,7 +69,7 @@ pipeline {
     // 2.6 La phase Notification
         post {
             success {
-                // Email Notification
+                // Email Notification success
                 mail to: 'kh_benferhat@esi.dz',
                      subject: "Success: ${currentBuild.fullDisplayName}",
                      body: "The build and deploy were successful."
@@ -80,7 +80,7 @@ pipeline {
                           message: "Build Success: ${currentBuild.fullDisplayName} (<${env.BUILD_URL}|Open>)"
             }
             failure {
-                // Email Notification
+                // Email Notification failure
                 mail to: 'kh_benferhat@esi.dz',
                      subject: "Failed: ${currentBuild.fullDisplayName}",
                      body: "The pipeline failed in stage: ${env.STAGE_NAME}"
